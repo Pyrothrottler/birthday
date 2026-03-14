@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Birthday Surprise</title>
+    <link rel="stylesheet" type="text/css" href="mythu.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>🎂 Birthday Surprise 🎉</h1>
+
+      <div id="countdown"></div>
+
+      <div class="gift" onclick="openGift()">
+        Tap the gift to open your birthday surprise 🎁
+      </div>
+
+      <div id="content" class="hidden">
+        <h2>Happy Birthday Kanmani❤️</h2>
+
+        <div class="slideshow">
+          <img id="slide" src="photo1.jpg" />
+        </div>
+
+        <div id="message">
+          You are one of the most amazing people in my life 💖 I hope your
+          birthday is full of happiness and love! I love you soooo much and wish
+          you all the best on your special day! 🎉🎂 Eppodhum unakaga naa
+          irupen❤️
+        </div>
+
+        <audio id="music" preload="auto" loop>
+          <source src="mythu.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+      // Countdown example (change date)
+      let birthday = new Date("April 08, 2026 00:00:00").getTime();
+
+      let timer = setInterval(function () {
+        let now = new Date().getTime();
+        let distance = birthday - now;
+
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML =
+          "Countdown: " +
+          days +
+          "d " +
+          hours +
+          "h " +
+          minutes +
+          "m " +
+          seconds +
+          "s";
+      }, 1000);
+
+      // Open gift
+      function openGift() {
+        document.getElementById("content").classList.remove("hidden");
+
+        let music = document.getElementById("music");
+
+        music.play();
+      }
+
+      // Slideshow
+
+      let photos = ["photo1.jpg", "photo2.jpg", "photo3.jpeg", "photo4.jpg","photo5.png","photo6.png","photo7.png","photo8.png","photo9.png"];
+      let index = 0;
+
+      setInterval(function () {
+        index++;
+
+        if (index >= photos.length) {
+          index = 0;
+        }
+
+        document.getElementById("slide").src = photos[index];
+      }, 2500);
+
+      // Confetti
+
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let hearts = [];
+
+      for (let i = 0; i < 80; i++) {
+        hearts.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 20 + 10,
+          speed: Math.random() * 2 + 1,
+        });
+      }
+
+      function drawHeart(x, y, size) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+
+        ctx.bezierCurveTo(
+          x,
+          y - size / 2,
+          x - size / 2,
+          y - size / 2,
+          x - size / 2,
+          y,
+        );
+
+        ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size, x, y + size);
+
+        ctx.bezierCurveTo(
+          x,
+          y + size,
+          x + size / 2,
+          y + size / 2,
+          x + size / 2,
+          y,
+        );
+
+        ctx.bezierCurveTo(x + size / 2, y - size / 2, x, y - size / 2, x, y);
+
+        ctx.fillStyle = "red";
+        ctx.fill();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        hearts.forEach((h) => {
+          drawHeart(h.x, h.y, h.size);
+
+          h.y += h.speed;
+
+          if (h.y > canvas.height) {
+            h.y = -10;
+          }
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
